@@ -83,3 +83,35 @@ export const deleteWorkspaceServices = async (workspaceId,userId) =>{
 
     
 };
+
+export const getWorkspaceService = async (workspaceId,userId) =>{
+    try {
+        const workspace = await workSpaceRepository.getById(workspaceId);
+        if (!workspace) {
+            throw new ClientError({
+                explanation: 'Invalid data sent from the client',
+                message: 'Workspace not found',
+                statusCode: StatusCodes.NOT_FOUND
+            });
+        }
+
+        const isMember = await workspace.members.find((member)=> member.memberId.toString() === userId );
+
+        if (!isMember) {
+            throw new ClientError({
+              explanation: 'User is not a member of the workspace',
+              message: 'User is not a member of the workspace',
+              statusCode: StatusCodes.UNAUTHORIZED
+            });
+          }
+
+        if(isMember){
+            return workspace;
+        }
+    } catch (error) {
+        console.log(error);
+        throw error;
+        
+    }
+
+}

@@ -1,6 +1,6 @@
 import { StatusCodes } from "http-status-codes"
 import { customErrorResponse, internalErrorResponse,successResponse} from "../utils/common/responseObject.js";
-import { createWorkspaceService,getWorkspacesUserIsMemberServices,deleteWorkspaceServices } from "../service/workspaceService.js";
+import { createWorkspaceService,getWorkspacesUserIsMemberServices,deleteWorkspaceServices,getWorkspaceService } from "../service/workspaceService.js";
 
 export const createWorkspaceController = async (req,res)=>{
     try {
@@ -46,4 +46,29 @@ export const deleteWorkspaceController = async (req,res)=>{
         }
     }
 }
+
+export const getWorkspaceController = async (req, res) => {
+    try {
+
+        const response = await getWorkspaceService(
+            req.params.workspaceId,
+            req.user
+        );
+        return res
+            .status(StatusCodes.OK)
+            .json(successResponse(response, 'Workspace fatched successfully'));
+
+    } catch (error) {
+
+        console.log('Get workspace controller error', error);
+        if (error.statusCode) {
+            return res.status(error.statusCode).json(customErrorResponse(error));
+        }
+
+        return res
+            .status(StatusCodes.INTERNAL_SERVER_ERROR)
+            .json(internalErrorResponse(error));
+            
+    }
+};
 
