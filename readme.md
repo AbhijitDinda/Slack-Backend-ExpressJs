@@ -1,3 +1,3 @@
 # workspaceSchema[channalSchema[messageSchema[]]]
 
-## 1.23.00 
+## 1.35.00 
