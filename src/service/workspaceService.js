@@ -9,12 +9,20 @@ import { response } from 'express';
 import Workspace from '../schema/workspace.js';
 
 const isUserAdminOfWorkspace = (workspace,userId) =>{
+    
     return workspace.members.find((member) => member.memberId.toString() === userId && member.role === 'admin'); 
 }
 
-export const isUserMemberOfWorkspace = (workspace,userId) =>{
-    return workspace.members.find((member) => member.memberId.toString() === userId); 
-}
+// export const isUserMemberOfWorkspace = (workspace,userId) =>{
+//     console.log("gggg",workspace,userId); 
+//     return workspace.members.find((member) => member.memberId.toString() === userId); 
+// }
+export const isUserMemberOfWorkspace = (workspace, userId) => {
+    // console.log("gggg",workspace,userId); 
+    return workspace.members.find(
+      (member) => member.memberId.toString() === userId
+    );
+  };
 
 export const createWorkspaceService = async (workspaceData) =>{
     try {
