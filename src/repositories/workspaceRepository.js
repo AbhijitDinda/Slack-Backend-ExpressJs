@@ -27,6 +27,7 @@ const workSpaceRepository = {
     getWorkspaceByJoinCode: async function(joinCode) {
       const workspace = await Workspace.findOne({joinCode});
 
+
       if(!workspace){
         throw new ClientError({
           explanation: 'invalid data send from the client',
@@ -34,6 +35,7 @@ const workSpaceRepository = {
           statusCode: StatusCodes.NOT_FOUND
         })
       }
+      return workspace
     },
     addMemberToWorkspace: async function(workspaceId,memberId,memberRole) {
       
@@ -94,6 +96,7 @@ const workSpaceRepository = {
       
       //check workspace exists or not
       const workspace = await Workspace.findById(workspaceId).populate('channels');
+      console.log(workspace);
       if(!workspace){
         throw new ClientError({
           explanation: 'invalid data send from the client',
@@ -119,7 +122,7 @@ const workSpaceRepository = {
         workspaceId:workspaceId
 
       })
-      console.log("channal",channal)
+      // console.log("channal",channal)
 
       workspace.channels.push(channal);
 
