@@ -5,9 +5,12 @@ import connectionDB from "./config/dbConfig.js";
 import apiRouter from './router/apiRoutes.js'
 import { isAuthenticated } from "./middleware/authMiddleware.js";
 import mailer from './config/mailConfig.js';
-
+import { Server } from 'socket.io';
+import { createServer } from 'http';
 
 const app = express();
+const server = createServer(app);
+const io = new Server(server);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }))
@@ -18,16 +21,30 @@ app.get('/ping',isAuthenticated, (req, res) => {
     return res.status(StatusCodes.OK).json({ message: 'pong' })
 })
 
-app.listen(PORT, async () => {
+io.on('connection', (socket) => {
+    console.log('a user connected', socket);
+
+    // setTimeout(()=>{
+    //     io.emit('message', 'this is massage from server ABHIJIT DINDA');
+    // },3000)
+
+    socket.on('messageFromClient', (data) => {
+        console.log('Message From Client', data);
+        io.emit('whatsappmessage', data.toUpperCase());
+    });
+});  
+
+server.listen(PORT, async () => {
     console.log(`server is running at ${PORT}`);
     connectionDB();
-    const mailResponse = await mailer.sendMail({
-        from: 'anitesh.runtime@gmail.com',
-        to: 'abhijit.runtime@gmail.com',
-        subject: "Hello ✔",
-        text: "Hello world?",
-        html: "<b>Hello world?</b>",
-    }); 
+    // const mailResponse = await mailer.sendMail({
+    //     from: 'anitesh.runtime@gmail.com',
+    //     to: 'abhijit.runtime@gmail.com',
+    //     subject: "Hello ✔",
+    //     text: "Hello world?",
+    //     html: "<b>Hello world?</b>",
+    // }); 
 
-    console.log(mailResponse);
+    // console.log(mailResponse);
 })
+
