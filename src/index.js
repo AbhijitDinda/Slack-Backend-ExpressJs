@@ -7,6 +7,7 @@ import { isAuthenticated } from "./middleware/authMiddleware.js";
 import mailer from './config/mailConfig.js';
 import { Server } from 'socket.io';
 import { createServer } from 'http';
+import messageHandlers from "./controller/messageSocketController.js";
 
 const app = express();
 const server = createServer(app);
@@ -22,16 +23,7 @@ app.get('/ping',isAuthenticated, (req, res) => {
 })
 
 io.on('connection', (socket) => {
-    console.log('a user connected', socket);
-
-    // setTimeout(()=>{
-    //     io.emit('message', 'this is massage from server ABHIJIT DINDA');
-    // },3000)
-
-    socket.on('messageFromClient', (data) => {
-        console.log('Message From Client', data);
-        io.emit('whatsappmessage', data.toUpperCase());
-    });
+    messageHandlers(io, socket)
 });  
 
 server.listen(PORT, async () => {
