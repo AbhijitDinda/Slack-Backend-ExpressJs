@@ -7,7 +7,8 @@ import { isAuthenticated } from "./middleware/authMiddleware.js";
 import mailer from './config/mailConfig.js';
 import { Server } from 'socket.io';
 import { createServer } from 'http';
-import messageHandlers from "./controller/messageSocketController.js";
+import messageSocketHandlers from "./controller/messageSocketController.js";
+import channelSocketHandlers from "./controller/channelSocketController.js";
 
 const app = express();
 const server = createServer(app);
@@ -23,7 +24,8 @@ app.get('/ping',isAuthenticated, (req, res) => {
 })
 
 io.on('connection', (socket) => {
-    messageHandlers(io, socket)
+    messageSocketHandlers(io, socket);
+    channelSocketHandlers(io, socket);
 });  
 
 server.listen(PORT, async () => {
