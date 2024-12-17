@@ -1,5 +1,5 @@
 import { createMessageService } from '../service/messageServices.js';
-import { NEW_MESSAGE_EVENT,NEW_MESSAGE_RECEIVED_EVENT } from '../utils/common/eventsConstant.js'
+import { NEW_MESSAGE_EVENT,NEW_MESSAGE_RECEIVED_EVENT } from '../utils/common/eventsConstant.js';
 export default function messageHandlers(io, socket) {
     socket.on(NEW_MESSAGE_EVENT, async function createMessageHandler(data, cb) {
 

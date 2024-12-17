@@ -11,6 +11,8 @@ const MessageRepository = {
             .limit(limit)
             .populate('senderId', 'username email avatar');
 
+        console.log(messages);
+
         return messages;
     }
 

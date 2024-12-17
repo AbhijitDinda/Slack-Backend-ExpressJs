@@ -1,11 +1,13 @@
 import  channalRepository from '../repositories/ChannalRepository.js';
+import  messageRepository from '../repositories/messageRepository.js';
 import { StatusCodes } from "http-status-codes";
 import ClientError from "../utils/error/clientError.js";
 import { isUserMemberOfWorkspace } from './workspaceService.js';
 export const getChannalByIdService = async (channelId, userId)=> {
+  // console.log("channelId",channelId)
     try {
         const channel = await channalRepository.getChannelWithWorkspaceDetails(channelId);
-        console.log("iiiiddd",channel)
+        // console.log("iiiiddd",channel)
 
         if (!channel || !channel.workspaceId) {
             throw new ClientError({
@@ -27,10 +29,19 @@ export const getChannalByIdService = async (channelId, userId)=> {
               statusCode: StatusCodes.UNAUTHORIZED
             });
           }
+
+        const messages = await messageRepository.getPaginatedMessages({ channelId },1,20);
       
       
 
-        return channel;
+      return {
+        messages,
+        _id: channel._id,
+        name: channel.name,
+        createdAt: channel.createdAt,
+        updatedAt: channel.updatedAt,
+        workspaceId: channel.workspaceId
+      };
     } catch (error) {
         console.log("Get channel by id service error",error);
         throw error;
