@@ -13,7 +13,7 @@ const workspaceSchema = new mongoose.Schema({
     {
       memberId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'user'
+        ref: 'User'
       },
       role: {
         type: String,
@@ -34,6 +34,6 @@ const workspaceSchema = new mongoose.Schema({
   ]
 });
 
-const Workspace = mongoose.model('Workspace', workspaceSchema);
+const Workspace = mongoose.model('Workspace', workspaceSchema); 
 
 export default Workspace;

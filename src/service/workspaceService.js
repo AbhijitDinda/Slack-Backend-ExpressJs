@@ -7,6 +7,7 @@ import ChannalRepository from '../repositories/ChannalRepository.js';
 import userRepository from '../repositories/userRepository.js';
 import { response } from 'express';
 import Workspace from '../schema/workspace.js';
+import User from '../schema/user.js';
 
 const isUserAdminOfWorkspace = (workspace,userId) =>{
     
@@ -63,6 +64,7 @@ export const getWorkspacesUserIsMemberServices = async (userId) =>{
 
     try {
         const reponse = await workSpaceRepository.fatchAllWorkspaceByMemberId(userId);
+        console.log("secound ",reponse)
         return reponse;
         
     } catch (error) {
