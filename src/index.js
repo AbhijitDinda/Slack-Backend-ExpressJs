@@ -9,10 +9,14 @@ import { Server } from 'socket.io';
 import { createServer } from 'http';
 import messageSocketHandlers from "./controller/messageSocketController.js";
 import channelSocketHandlers from "./controller/channelSocketController.js";
+import cors from 'cors';
 
 const app = express();
 const server = createServer(app);
 const io = new Server(server);
+
+
+app.use(cors());
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }))
