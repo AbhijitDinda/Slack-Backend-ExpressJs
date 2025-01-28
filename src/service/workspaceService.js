@@ -19,11 +19,16 @@ const isUserAdminOfWorkspace = (workspace,userId) =>{
 //     return workspace.members.find((member) => member.memberId.toString() === userId); 
 // }
 export const isUserMemberOfWorkspace = (workspace, userId) => {
-    // console.log("gggg",workspace,userId); 
-    return workspace.members.find(
-      (member) => member.memberId.toString() === userId
-    );
+    return workspace.members.find((member) => {
+      console.log('member id ', member.memberId.toString());
+      return member.memberId._id.toString() === userId;
+    });
   };
+// export const isUserMemberOfWorkspace = (workspace, userId) => {
+//     return workspace.members.find(
+//       (member) => member.memberId.toString() === userId
+//     );
+//   };
 
 export const createWorkspaceService = async (workspaceData) =>{
     try {
@@ -105,7 +110,7 @@ export const deleteWorkspaceServices = async (workspaceId,userId) =>{
 
 export const getWorkspaceService = async (workspaceId,userId) =>{
     try {
-        const workspace = await workSpaceRepository.getById(workspaceId);
+        const workspace = await workSpaceRepository.getWorkspaceDetailsById(workspaceId);
         if (!workspace) {
             throw new ClientError({
                 explanation: 'Invalid data sent from the client',
@@ -114,7 +119,7 @@ export const getWorkspaceService = async (workspaceId,userId) =>{
             });
         }
 
-        const isMember = await workspace.members.find((member)=> member.memberId.toString() === userId );
+        const isMember = isUserMemberOfWorkspace(workspace,userId)
 
         if (!isMember) {
             throw new ClientError({
